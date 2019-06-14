@@ -28,15 +28,10 @@ class AlchemyEncoder(json.JSONEncoder):
             for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
                 data = obj.__getattribute__(field)
                 try:
-                    if isinstance(data.__class__, DeclarativeMeta):
-                        _obj = AlchemyEncoder.default(self, data)
-                        json.dumps(_obj)
-                        fields[field] = _obj
-                    else:
-                        json.dumps(data)
-                        fields[field] = data
+                    json.dumps(data)
+                    fields[field] = data
                 except TypeError:
-                    fields[field] = str(data)
+                    fields[field] = None
 
             return fields
 
